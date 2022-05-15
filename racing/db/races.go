@@ -72,7 +72,7 @@ func (r *racesRepo) applyFilter(query string, filter *racing.ListRacesRequestFil
 		return query, args
 	}
 	//checking the visibility flag, if the boolean flag is true then adding visible = 1 in the query
-	if filter.Visible != nil && filter.Visible == true {
+	if filter.Visible {
 		clauses = append(clauses, "visible = 1")
 	}
 
