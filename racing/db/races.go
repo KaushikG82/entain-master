@@ -88,6 +88,11 @@ func (r *racesRepo) applyFilter(query string, filter *racing.ListRacesRequestFil
 		query += " WHERE " + strings.Join(clauses, " AND ")
 	}
 
+	//Adding order by clause based on OrderByAdvertiseTime bool value
+	if filter.OrderByAdvertiseTime {
+		query += "ORDER BY advertised_start_time"
+	}
+
 	return query, args
 }
 
