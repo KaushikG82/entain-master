@@ -26,6 +26,8 @@ message ListRacesRequestFilter {
   repeated int64 meeting_ids = 1;
   //Adding parameter for visibility
   bool visible = 2;
+  //Adding the OrderByAdvertiseTime boolean flag to sort the result based on 'advertised_start_time'
+  bool order_by_advertise_time = 3;
 }
 
 /* Resources */

@@ -72,7 +72,7 @@ func (r *racesRepo) applyFilter(query string, filter *racing.ListRacesRequestFil
 		return query, args
 	}
 	//checking the visibility flag, if the boolean flag is true then adding visible = 1 in the query
-	if filter.Visible != nil && filter.Visible == true {
+	if filter.Visible {
 		clauses = append(clauses, "visible = 1")
 	}
 
@@ -86,6 +86,11 @@ func (r *racesRepo) applyFilter(query string, filter *racing.ListRacesRequestFil
 
 	if len(clauses) != 0 {
 		query += " WHERE " + strings.Join(clauses, " AND ")
+	}
+
+	//Adding order by clause based on OrderByAdvertiseTime bool value
+	if filter.OrderByAdvertiseTime {
+		query += "ORDER BY advertised_start_time"
 	}
 
 	return query, args
