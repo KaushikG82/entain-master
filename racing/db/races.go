@@ -21,6 +21,11 @@ type RacesRepo interface {
 	List(filter *racing.ListRacesRequestFilter) ([]*racing.Race, error)
 }
 
+const (
+	CLOSED_STATUS = "CLOSED"
+	OPEN_STATUS   = "OPEN"
+)
+
 type racesRepo struct {
 	db   *sql.DB
 	init sync.Once
@@ -111,6 +116,12 @@ func (m *racesRepo) scanRaces(
 			}
 
 			return nil, err
+		}
+
+		if advertisedStart.Before(time.Now()) {
+			race.Status = CLOSED_STATUS
+		} else {
+			race.Status = OPEN_STATUS
 		}
 
 		ts, err := ptypes.TimestampProto(advertisedStart)
