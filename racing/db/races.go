@@ -58,9 +58,9 @@ func (r *racesRepo) Get(filter *racing.RaceRequestFilter) (*racing.Race, error) 
 		query string
 		race  *racing.Race
 	)
-	query = getRaceQueries()[getRace]
+	query = getRaceQueries()[getRaceByID]
 	if filter != nil {
-		row := r.db.QueryRow(query, filter.MeetingId)
+		row := r.db.QueryRow(query, filter.Id)
 
 		var advertisedStart time.Time
 		if err := row.Scan(&race.Id, &race.MeetingId, &race.Name, &race.Number, &race.Visible, &advertisedStart); err != nil {

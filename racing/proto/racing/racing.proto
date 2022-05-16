@@ -19,7 +19,7 @@ message RaceRequest {
 }
 
 message RaceRequestFilter {
-  int64 meeting_id = 1;
+  int64 id = 1;
 }
 //Responese to GetRace
 message RaceResponse {
