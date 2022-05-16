@@ -1,8 +1,8 @@
 package db
 
 const (
-	racesList = "list"
-	getRace   = "Get"
+	racesList   = "list"
+	getRaceByID = "Get"
 )
 
 //added new query to fetch the single race details based on meeting_id
@@ -18,7 +18,7 @@ func getRaceQueries() map[string]string {
 				advertised_start_time 
 			FROM races
 		`,
-		getRace: `
+		getRaceByID: `
 			SELECT
 				id, 
 				meeting_id, 
@@ -27,7 +27,7 @@ func getRaceQueries() map[string]string {
 				visible, 
 				advertised_start_time 
 			FROM races
-			WHERE meeting_id = $1
+			WHERE id = $1
 		`,
 	}
 }
