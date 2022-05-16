@@ -2,6 +2,7 @@ package db
 
 import (
 	"database/sql"
+	"fmt"
 	"strings"
 	"sync"
 	"time"
@@ -19,6 +20,9 @@ type RacesRepo interface {
 
 	// List will return a list of races.
 	List(filter *racing.ListRacesRequestFilter) ([]*racing.Race, error)
+
+	//Get the perticular race details
+	Get(filter *racing.RaceRequestFilter) (*racing.Race, error)
 }
 
 const (
@@ -46,6 +50,36 @@ func (r *racesRepo) Init() error {
 	})
 
 	return err
+}
+
+//This method will return single race details based on MeetingId provided in request
+func (r *racesRepo) Get(filter *racing.RaceRequestFilter) (*racing.Race, error) {
+	var (
+		query string
+		race  *racing.Race
+	)
+	query = getRaceQueries()[getRace]
+	if filter != nil {
+		row := r.db.QueryRow(query, filter.MeetingId)
+
+		var advertisedStart time.Time
+		if err := row.Scan(&race.Id, &race.MeetingId, &race.Name, &race.Number, &race.Visible, &advertisedStart); err != nil {
+			if err == sql.ErrNoRows {
+				return nil, nil
+			}
+
+			return nil, err
+		}
+		ts, err := ptypes.TimestampProto(advertisedStart)
+		if err != nil {
+			return nil, err
+		}
+
+		race.AdvertisedStartTime = ts
+		return race, nil
+	}
+	return nil, fmt.Errorf("Illigal Argument error")
+
 }
 
 func (r *racesRepo) List(filter *racing.ListRacesRequestFilter) ([]*racing.Race, error) {
